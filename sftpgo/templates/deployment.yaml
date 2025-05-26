@@ -62,6 +62,10 @@ spec:
               value: "2021"
             - name: SFTPGO_FTPD__BINDINGS__0__ADDRESS
               value: "0.0.0.0"
+            - name: SFTPGO_FTPD__PASSIVE_PORT_RANGE__START
+              value: "{{ .Values.ftpd.passivePortRange.start }}"
+            - name: SFTPGO_FTPD__PASSIVE_PORT_RANGE__END
+              value: "{{ .Values.ftpd.passivePortRange.end }}"
             {{- end }}
             {{- if .Values.webdavd.enabled }}
             - name: SFTPGO_WEBDAVD__BINDINGS__0__PORT

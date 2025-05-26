@@ -48,6 +48,17 @@ spec:
       {{- if semverCompare ">=1.20-0" .Capabilities.KubeVersion.GitVersion }}
       appProtocol: ftp
       {{- end }}
+      {{- if .Values.service.ports.ftp.exposePassivePorts }}
+        {{- $start := (.Values.ftpd.passivePortRange.start) }}
+        {{- $end := (.Values.ftpd.passivePortRange.end) }}
+        {{- range $port := until (add1 $end | int) }}
+          {{- if ge $port ($start | int) }}
+    - name: pasv-{{ $port }}
+      port: {{ $port }}
+      targetPort: {{ $port }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.webdavd.enabled }}
     - name: webdav
@@ -134,6 +145,17 @@ spec:
       protocol: TCP
       {{- if semverCompare ">=1.20-0" $.Capabilities.KubeVersion.GitVersion }}
       appProtocol: ftp
+      {{- end }}
+      {{- if and $.Values.ftpd.enabled $service.ports.ftp.exposePassivePorts }}
+        {{- $start := ($.Values.ftpd.passivePortRange.start) }}
+        {{- $end := ($.Values.ftpd.passivePortRange.end) }}
+        {{- range $port := until (add1 $end | int) }}
+          {{- if ge $port ($start | int) }}
+    - name: pasv-{{ $port }}
+      port: {{ $port }}
+      targetPort: {{ $port }}
+          {{- end }}
+        {{- end }}
       {{- end }}
     {{- end }}
     {{- if and $.Values.webdavd.enabled $service.ports.webdav }}

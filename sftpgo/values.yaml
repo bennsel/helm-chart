@@ -34,6 +34,9 @@ sftpd:
 ftpd:
   # -- Enable FTP service.
   enabled: false
+  passivePortRange:
+    start: 50000 # -- Passive port range start
+    end: 50100 # -- Passive port range end
 
 webdavd:
   # -- Enable WebDAV service.
@@ -143,6 +146,9 @@ service:
       # -- (int) FTP node port (when applicable).
       nodePort:
 
+      # -- bool Expose passive ports
+      exposePassivePorts: false
+
     webdav:
       # -- WebDAV service port.
       port: 81
@@ -176,6 +182,10 @@ services: {}
   #     sftp: # Only SFTP will be exposed
   #       port: 22
   #       nodePort:
+  #     ftp: # Only FTP will be exposed
+  #       port: 21
+  #       nodePort:
+  #       exposePassivePorts: false
   #   externalTrafficPolicy:
   #   sessionAffinity:
 
